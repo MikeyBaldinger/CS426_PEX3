@@ -1,0 +1,97 @@
+// Mikey Baldinger and Caden Kulp
+// CS426 PEX3 - Semantic Analyzer
+
+Package CS426;
+
+Helpers
+	// 9 = tab, 13(Mac)/10(Windows) = newline
+	whitespace = ' ' | 9 | 13 | 10; 	
+	whole = ['1' .. '9'];
+	natural = ['0' + whole];
+	letter = [['a' .. 'z'] + ['A' .. 'Z']];
+	underscore = '_';
+	exponent = 'e';
+
+Tokens
+	// Operators and EOL
+	assign = '=';
+	plus = '+';
+	minus = '-';
+	mult = '*';	
+	div = '/';
+	and = '&';
+	or = '|';
+	not = '!';
+	equal = '==';
+	greateq = '>=';
+	lesseq = '<=';
+	greater = '>';
+	less = '<';
+	eol = ';';
+	openpar = '(';
+	closepar = ')';
+	openbrace = '{';
+	closebrace = '}';
+	comma = ',';
+
+	// Program Control Keywords
+	func = 'func';
+	while = 'while';
+	if = 'if';
+	else = 'else';
+	const = 'const';
+	main = 'main';
+
+	// Variable Names
+	id = ((underscore)? letter (letter)* (underscore)?)*;
+	comment = '//' ([[0 .. 0xffff] - [10 + 13]])*;
+	
+	// Literals
+	integer = '0' | whole (natural)*;
+	floating = ('0' | whole (natural)*) '.' (natural)+ (exponent '-'? whole (natural)*)?;
+	// 32-126 is the ASCII values for every typable character
+	string = '"' [32 .. 126]+ '"';
+	
+	// Whitespace
+	blank = whitespace+;	
+
+Ignored Tokens
+	blank, comment;
+
+Productions
+	program = constant_declarations function_declarations main_program;
+	
+	constant_declarations = {consts} constant_declarations constant_declaration | {none} ;
+	constant_declaration = {constant} const [type]:id [var_name]:id assign expression eol;
+	
+	function_declarations = {funcs} function_declarations function_declaration | {none} ;
+	function_declaration = {function} func id openpar formal_parameters closepar openbrace lines_of_code closebrace;
+	
+	formal_parameters = {multiple} formal_parameter comma formal_parameters | {last} formal_parameter | {none} ;
+	formal_parameter = [type]:id [var_name]:id;
+	
+	main_program = main openbrace lines_of_code closebrace;
+	
+	lines_of_code = {lines} lines_of_code line_of_code | {line} line_of_code;
+	line_of_code = {decl} declaration_line | {assign} assignment_line | {function_call} function_call_line | {ifelse} if_line | {while} while_line;
+	
+	declaration_line = [type]:id [var_name]:id eol;
+	assignment_line = id assign addition_expr eol;
+	
+	function_call_line = id openpar actual_parameters closepar eol;
+	actual_parameters = {multiple} actual_parameter comma actual_parameters | {last} actual_parameter | {none} ;
+	actual_parameter = {expr} addition_expr | {string} string;
+	
+	while_line = while openpar condition closepar openbrace lines_of_code closebrace;
+	if_line = {noelse} if openpar condition closepar openbrace lines_of_code closebrace | {else} if openpar condition closepar openbrace lines_of_code closebrace else_line;
+	else_line = else openbrace lines_of_code closebrace;
+	
+	condition = {cond} first operator addition_expr more_conditions condition | {pass} addition_expr | {none} ;
+	first = addition_expr;
+	more_conditions = {and} and | {or} or | {none} ;
+	operator = {eq} equal | {noteq} not assign | {greater} greater | {less} less | {greateq} greateq | {lesseq} lesseq;
+	
+	addition_expr = {add} addition_expr plus multi_expr | {pass} multi_expr;
+	multi_expr = {multi} multi_expr mult operand | {pass} operand;
+	operand = {int} integer | {float} floating | {id} id;
+	expression = {int} integer | {float} floating | {string} string;

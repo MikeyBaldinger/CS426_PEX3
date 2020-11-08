@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30406.217
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaldingerKulpSA", "BaldingerKulpSA.csproj", "{0DEA5D8F-537C-404A-87EA-CE99AD7363B6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0DEA5D8F-537C-404A-87EA-CE99AD7363B6}.Debug|x86.ActiveCfg = Debug|x86
+		{0DEA5D8F-537C-404A-87EA-CE99AD7363B6}.Debug|x86.Build.0 = Debug|x86
+		{0DEA5D8F-537C-404A-87EA-CE99AD7363B6}.Release|x86.ActiveCfg = Release|x86
+		{0DEA5D8F-537C-404A-87EA-CE99AD7363B6}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DCC3FE2C-1208-46E8-9A79-5E608B73E495}
+	EndGlobalSection
+EndGlobal
