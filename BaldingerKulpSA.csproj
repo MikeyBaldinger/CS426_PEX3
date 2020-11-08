@@ -43,11 +43,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="analysis.cs" />
+    <Compile Include="Definitions.cs" />
     <Compile Include="lexer.cs" />
     <Compile Include="nodes.cs" />
     <Compile Include="parser.cs" />
     <Compile Include="prods.cs" />
     <Compile Include="SA_main.cs" />
+    <Compile Include="SemanticAnalyzer.cs" />
     <Compile Include="tokens.cs" />
   </ItemGroup>
   <ItemGroup>
