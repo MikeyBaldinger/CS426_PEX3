@@ -1,0 +1,10 @@
+// Fails if variable x already declared - Needs work
+
+const int x = 7;
+const int x = 5;
+
+main {
+
+	int y;
+
+}

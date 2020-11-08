@@ -1,0 +1,9 @@
+// Fails when y has not been declared
+
+main {
+
+	int x;
+
+	y = 5;
+
+}

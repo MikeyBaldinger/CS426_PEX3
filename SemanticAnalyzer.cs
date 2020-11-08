@@ -135,23 +135,22 @@ namespace CS426.analysis
             // Checking the assignment portion
 
             Definition idDef, exprDef;
-            String varName = node.GetId().Text;
 
-            if (!(idDef is VariableDefinition))
+            // Ensure that ID has been declared
+            if (!_currentSymbolTable.TryGetValue(varName, out idDef))
             {
-                Console.WriteLine("[" + node.GetId().Line + "] : " + varName + " is not a valid variable.");
-
-                // Ensure that expression node has been decorated
+                Console.WriteLine("[" + node.GetVarName().Line + "] : " + varName + " is not defined.");
             }
-            else if (!_decoratedParseTree.TryGetValue(node.GetExpr(), out exprDef))
+            // Ensure that addition_expr node has been decorated
+            else if (!_decoratedParseTree.TryGetValue(node.GetExpression(), out exprDef))
             {
-                Console.WriteLine("[" + node.GetId().Line + "] : right hand side was not decorated.");
+                Console.WriteLine("[" + node.GetVarName().Line + "] : right hand side was not decorated.");
 
-                // Ensure that addition_expr and ID have the same types
+            // Ensure that addition_expr and ID have the same types
             }
             else if (!exprDef.name.Equals(((VariableDefinition)idDef).vartype.name))
             {
-                Console.WriteLine("[" + node.GetId().Line + "] : Invalid assignment. Can not assign " + exprDef.name + " to " +
+                Console.WriteLine("[" + node.GetType().Line + "] : Invalid assignment. Can not assign " + exprDef.name + " to " +
                     idDef.name + ".");
             }
         }
@@ -183,7 +182,7 @@ namespace CS426.analysis
             }
             else if (!addition_exprDef.name.Equals(((VariableDefinition)idDef).vartype.name))
             {
-                Console.WriteLine("[" + node.GetId().Line + "] : Invalid assignment. Can not assign " + exprDef.name + " to " +
+                Console.WriteLine("[" + node.GetId().Line + "] : Invalid assignment. Can not assign " + addition_exprDef.name + " to " +
                     idDef.name + ".");
 
             }
@@ -253,7 +252,6 @@ namespace CS426.analysis
             {
                 Console.WriteLine("[" + node.GetId().Line + "] : CS426 only allows strings and basic types as arguments.");
             }
-            else if ()
         }
 
         // swap(x, y, z, a, b);
@@ -266,26 +264,26 @@ namespace CS426.analysis
             // Ensure lhs of the plus is decorated
             if (!_decoratedParseTree.TryGetValue(node.GetFirst(), out lhs))
             {
-                Console.WriteLine("[" + node.GetOperator().Line + "] : left hand side of operator was not decorated.");
+                Console.WriteLine("[" + node.GetOperator() + "] : left hand side of operator was not decorated.");
 
                 // Ensure rhs of the plus is decorated
             }
             else if (!_decoratedParseTree.TryGetValue(node.GetAdditionExpr(), out rhs))
             {
-                Console.WriteLine("[" + node.GetOperator().Line + "] : right hand side of operator was not decorated.");
+                Console.WriteLine("[" + node.GetOperator() + "] : right hand side of operator was not decorated.");
 
                 // Ensure sides are the same type
             }
             else if (!lhs.name.Equals(rhs.name))
             {
-                Console.WriteLine("[" + node.GetOperator().Line + "] : Type mismatch.  Cannot compare " + lhs.name + " with " +
+                Console.WriteLine("[" + node.GetOperator() + "] : Type mismatch.  Cannot compare " + lhs.name + " with " +
                     rhs.name + ".");
 
                 // Ensure that lhs and rhs are basic types
             }
             else if (!(lhs is BasicTypeDefinition))
             {
-                Console.WriteLine("[" + node.GetPlus().Line + "] : Invalid Type.  Cannot add " + lhs.name + "s.");
+                Console.WriteLine("[" + node.GetOperator() + "] : Invalid Type.  Cannot add " + lhs.name + "s.");
 
                 // Decorate this node
             }
@@ -483,7 +481,7 @@ namespace CS426.analysis
         {
             // Decorate this node
             BasicTypeDefinition stringDef = new BasicTypeDefinition();
-            intDef.name = "string";
+            stringDef.name = "string";
             _decoratedParseTree.Add(node, stringDef);
         }
 

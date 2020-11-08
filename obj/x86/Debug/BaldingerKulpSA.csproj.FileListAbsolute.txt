@@ -1,2 +1,6 @@
 C:\Users\C21Caden.Kulp\CS426\CS426_PEX3\obj\x86\Debug\BaldingerKulpSA.csprojAssemblyReference.cache
 C:\Users\C21Caden.Kulp\CS426\CS426_PEX3\obj\x86\Debug\BaldingerKulpSA.csproj.CoreCompileInputs.cache
+C:\Users\C21Caden.Kulp\CS426\CS426_PEX3\bin\Debug\ConsoleApplication.exe
+C:\Users\C21Caden.Kulp\CS426\CS426_PEX3\bin\Debug\ConsoleApplication.pdb
+C:\Users\C21Caden.Kulp\CS426\CS426_PEX3\obj\x86\Debug\ConsoleApplication.exe
+C:\Users\C21Caden.Kulp\CS426\CS426_PEX3\obj\x86\Debug\ConsoleApplication.pdb
