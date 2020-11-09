@@ -1,0 +1,11 @@
+// Fails when actual parameter types do not match formal paramters
+
+func loser(int x) {
+	int y;
+}
+
+main {
+
+	loser(5);
+	
+}

@@ -1,0 +1,11 @@
+// Fails when formal parameter is declared of incorrect type
+
+func loser(type x) {
+	int x;
+}
+
+main {
+	
+	int loser;
+	
+}

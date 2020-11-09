@@ -1,0 +1,15 @@
+// Fails when function name is already used
+
+func loser() {
+	int x;
+}
+
+func loser() {
+	int y;
+}
+
+main {
+	
+	int loser;
+	
+}

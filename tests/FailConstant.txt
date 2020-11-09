@@ -1,0 +1,11 @@
+// Fails when x is already constant
+
+const int x = 5;
+
+main {
+	
+	int y;
+	y = 1;
+	
+	x = y
+}

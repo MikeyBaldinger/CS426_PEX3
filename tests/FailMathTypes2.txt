@@ -1,0 +1,14 @@
+// Fails when arithmatic types are not int or float
+
+main {
+	
+	type f;
+	f = 1.2;
+	
+	fake x;
+	x = 5;
+	
+	int y;
+	y = 5 + x;
+
+}

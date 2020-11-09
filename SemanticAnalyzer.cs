@@ -12,9 +12,31 @@ namespace CS426.analysis
         // Symbol Tables
         LinkedList<Dictionary<string, Definition>> _previousSymbolTables = new LinkedList<Dictionary<string, Definition>>();
         Dictionary<string, Definition> _currentSymbolTable = new Dictionary<string, Definition>();
+        Dictionary<string, Definition> _globalSymbolTable = new Dictionary<string, Definition>();
+        Dictionary<string, Definition> _functionSymbolTable = new Dictionary<string, Definition>();
 
         // ParseTree Decoration
         Dictionary<Node, Definition> _decoratedParseTree = new Dictionary<Node, Definition>();
+
+        public override void InAProgram(AProgram node)
+        {
+            // Build definitions for allowed types according to grammar. CS246 grammar only allows int, string, and float
+            BasicTypeDefinition intType;
+            intType = new BasicTypeDefinition();
+            intType.name = "int";
+
+            StringTypeDefinition stringType = new StringTypeDefinition();
+            stringType.name = "string";
+
+            BasicTypeDefinition floatType = new BasicTypeDefinition();
+            floatType.name = "float";
+
+            // Create and seed the symbolTable
+            _globalSymbolTable = new Dictionary<string, Definition>();
+            _globalSymbolTable.Add("int", intType);
+            _globalSymbolTable.Add("string", stringType);
+            _globalSymbolTable.Add("float", floatType);
+        }
 
         //DONE
         public override void InAMainProgram(AMainProgram node)
@@ -53,27 +75,28 @@ namespace CS426.analysis
 
             BasicTypeDefinition floatType;
             floatType = new BasicTypeDefinition();
-            floatType.name = "float";
+            floatType.name = "float";            
 
             // Create and seed the symbol table.
-            _currentSymbolTable = new Dictionary<string, Definition>();
-            _currentSymbolTable.Add("int", intType);
-            _currentSymbolTable.Add("string", stringType);
-            _currentSymbolTable.Add("float", floatType);
+            _functionSymbolTable = new Dictionary<string, Definition>();
+            _functionSymbolTable.Add("int", intType);
+            _functionSymbolTable.Add("string", stringType);
+            _functionSymbolTable.Add("float", floatType);
         }
 
         //DONE
         public override void OutAFunctionFunctionDeclaration(AFunctionFunctionDeclaration node)
         {
             // Restore previous symbol table
-            _currentSymbolTable = _previousSymbolTables.First();
+            _functionSymbolTable = _previousSymbolTables.First();
             _previousSymbolTables.RemoveFirst();
 
             Definition def;
+            
             String methodName = node.GetId().Text;
 
             // Ensure submethod name isn't used
-            if (_currentSymbolTable.TryGetValue(methodName, out def))
+            if (_functionSymbolTable.TryGetValue(methodName, out def))
             {
                 Console.WriteLine("[" + node.GetOpenpar().Line + "] : " + methodName + " is already declared.");
 
@@ -88,13 +111,40 @@ namespace CS426.analysis
                 // ToyLanguage doens't allow parameters, so the parameter list will be empty.
                 ((MethodDefinition)def).paramList.Clear();
 
-                _currentSymbolTable.Add(methodName, def);
+                _functionSymbolTable.Add(methodName, def);
             }
         }
 
-        // Checking formal parameters match actual parameters
+        public override void OutAFormalParameter(AFormalParameter node)
+        {
+            Definition typeDef, varDef;
+            String typeName = node.GetType().Text;
+            String varName = node.GetVarName().Text;
 
+            // Check that the type name is defined
+            if (!_functionSymbolTable.TryGetValue(typeName, out typeDef))
+            {
+                Console.WriteLine("[" + node.GetType().Line + "] : " + typeName + " is not defined.");
 
+                // Check that the type name is defined as a type
+            }
+            else if (!(typeDef is TypeDefinition))
+            {
+                Console.WriteLine("[" + node.GetType().Line + "] : " + typeName + " is not a valid type.");
+
+            }
+            else if (_functionSymbolTable.TryGetValue(varName, out varDef))
+            {
+                Console.WriteLine("[" + node.GetVarName().Line + "] : " + varName + " is already a parameter.");
+            }
+            else
+            {
+                VariableDefinition newDef = new VariableDefinition();
+                newDef.name = varName;
+                newDef.vartype = (TypeDefinition)typeDef;
+                _functionSymbolTable.Add(varName, newDef);
+            }
+        }
 
         //WORKING - constant declarations need global scope
         public override void OutAConstantConstantDeclaration(AConstantConstantDeclaration node)
@@ -106,7 +156,7 @@ namespace CS426.analysis
             String varName = node.GetVarName().Text;
 
             // Check that the type name is defined
-            if (!_currentSymbolTable.TryGetValue(typeName, out typeDef))
+            if (!_globalSymbolTable.TryGetValue(typeName, out typeDef))
             {
                 Console.WriteLine("[" + node.GetType().Line + "] : " + typeName + " is not defined.");
 
@@ -118,7 +168,7 @@ namespace CS426.analysis
 
                 // check that the var name is not defined
             }
-            else if (_currentSymbolTable.TryGetValue(varName, out varDef))
+            else if (_globalSymbolTable.TryGetValue(varName, out varDef))
             {
                 Console.WriteLine("[" + node.GetVarName().Line + "] : " + varName + " is already defined.");
 
@@ -129,7 +179,7 @@ namespace CS426.analysis
                 VariableDefinition newDef = new VariableDefinition();
                 newDef.name = varName;
                 newDef.vartype = (TypeDefinition)typeDef;
-                _currentSymbolTable.Add(varName, newDef);
+                _globalSymbolTable.Add(varName, newDef);
             }
 
             // Checking the assignment portion
@@ -137,7 +187,7 @@ namespace CS426.analysis
             Definition idDef, exprDef;
 
             // Ensure that ID has been declared
-            if (!_currentSymbolTable.TryGetValue(varName, out idDef))
+            if (!_globalSymbolTable.TryGetValue(varName, out idDef))
             {
                 Console.WriteLine("[" + node.GetVarName().Line + "] : " + varName + " is not defined.");
             }
@@ -160,6 +210,12 @@ namespace CS426.analysis
         {
             Definition idDef, addition_exprDef;
             String varName = node.GetId().Text;
+
+            // Ensure variable is not already a constant
+            if (_globalSymbolTable.TryGetValue(varName, out idDef))
+            {
+                Console.WriteLine("[" + node.GetId().Line + "] : " + varName + " is already a constant.");
+            }
 
             // Ensure that ID has been declared
             if (!_currentSymbolTable.TryGetValue(varName, out idDef))
@@ -194,6 +250,12 @@ namespace CS426.analysis
             Definition typeDef, varDef;
             String typeName = node.GetType().Text;
             String varName = node.GetVarName().Text;
+
+            // Ensure variable is not already a constant
+            if (_globalSymbolTable.TryGetValue(varName, out typeDef))
+            {
+                Console.WriteLine("[" + node.GetType().Line + "] : " + varName + " is already a constant.");
+            }
 
             // Check that the type name is defined
             if (!_currentSymbolTable.TryGetValue(typeName, out typeDef))
@@ -230,7 +292,7 @@ namespace CS426.analysis
             String funcName = node.GetId().Text;
 
             // Ensure that ID has been declared
-            if (!_currentSymbolTable.TryGetValue(funcName, out idDef))
+            if (!_functionSymbolTable.TryGetValue(funcName, out idDef))
             {
                 Console.WriteLine("[" + node.GetId().Line + "] : " + funcName + " is not defined.");
 

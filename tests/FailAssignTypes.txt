@@ -1,0 +1,9 @@
+// Fails when types don't match
+
+main {
+	
+	int x;
+	x = 5;
+	float y;
+	y = x;
+}

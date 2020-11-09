@@ -1,0 +1,14 @@
+// Fails when arithmatic types don't match
+
+main {
+	
+	float f;
+	f = 1.2;
+	
+	int x;
+	x = 5;
+	
+	int y;
+	y = f + x;
+
+}

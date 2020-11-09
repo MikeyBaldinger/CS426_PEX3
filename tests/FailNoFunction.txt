@@ -1,0 +1,10 @@
+// Fails when we try and call a function that is not even a function
+
+main {
+
+	int x;
+	x = 5;
+	
+	x(5, 4);
+	
+}
