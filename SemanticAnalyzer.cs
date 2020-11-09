@@ -258,9 +258,12 @@ namespace CS426.analysis
             }
 
             // Check that the type name is defined
-            if (!_currentSymbolTable.TryGetValue(typeName, out typeDef))
+            if (!_currentSymbolTable.TryGetValue(typeName, out typeDef))    // Checking in main program (currentSybmolTable)
             {
-                Console.WriteLine("[" + node.GetType().Line + "] : " + typeName + " is not defined.");
+                if (!_functionSymbolTable.TryGetValue(typeName, out typeDef))    // Checking in function declaration (functionSybmolTable)
+                {
+                    Console.WriteLine("[" + node.GetType().Line + "] : " + typeName + " is not defined.");
+                }
 
                 // Check that the type name is defined as a type
             }
