@@ -316,14 +316,14 @@ namespace CS426.analysis
 
                 // Ensure that argument has been decorated
             }
-            //else if (!_decoratedParseTree.TryGetValue(node.GetActualParameters(), out exprDef))
-            //{
-             //   Console.WriteLine("[" + node.GetId().Line + "] : argument was not decorated.");
+            else if (!_decoratedParseTree.TryGetValue(node.GetActualParameters(), out exprDef))
+            {
+                Console.WriteLine("[" + node.GetId().Line + "] : argument was not decorated.");
 
                 // Ensure that expr is a string or basic type
-            //}
+            }
             //else if (!_functionSymbolTable.TryGetValue(node.GetActualParameters(), out typeDef))
-            //{
+            ////{
             //    Console.WriteLine("[" + node.GetId().Line + "] : CS426 only allows strings and basic types as arguments.");
             //}
         }
