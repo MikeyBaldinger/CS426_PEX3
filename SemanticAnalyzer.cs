@@ -88,8 +88,8 @@ namespace CS426.analysis
         public override void OutAFunctionFunctionDeclaration(AFunctionFunctionDeclaration node)
         {
             // Restore previous symbol table
-            _functionSymbolTable = _previousSymbolTables.First();
-            _previousSymbolTables.RemoveFirst();
+            //_functionSymbolTable = _previousSymbolTables.First();
+            //_previousSymbolTables.RemoveFirst();
 
             Definition def;
             
@@ -106,10 +106,10 @@ namespace CS426.analysis
             {
                 def = new MethodDefinition();
                 def.name = node.GetId().Text;
-                ((MethodDefinition)def).paramList = new List<VariableDefinition>();
+                //((MethodDefinition)def).paramList = new List<VariableDefinition>();
 
                 // ToyLanguage doens't allow parameters, so the parameter list will be empty.
-                ((MethodDefinition)def).paramList.Clear();
+                //((MethodDefinition)def).paramList.Clear();
 
                 _functionSymbolTable.Add(methodName, def);
             }
@@ -142,7 +142,16 @@ namespace CS426.analysis
                 VariableDefinition newDef = new VariableDefinition();
                 newDef.name = varName;
                 newDef.vartype = (TypeDefinition)typeDef;
-                _functionSymbolTable.Add(varName, newDef);
+                //_functionSymbolTable.Add(varName, newDef);
+
+                Definition def;
+                def = new MethodDefinition();
+                def.name = varName;
+
+                ((MethodDefinition)def).paramList = new List<VariableDefinition>();
+                ((MethodDefinition)def).paramList.Add(newDef);
+
+                _functionSymbolTable.Add(def.name, def);
             }
         }
 
@@ -291,10 +300,10 @@ namespace CS426.analysis
         //DONE
         public override void OutAFunctionCallLine(AFunctionCallLine node)
         {
-            Definition idDef, exprDef;
+            Definition idDef, exprDef, typeDef;
             String funcName = node.GetId().Text;
 
-            // Ensure that ID has been declared
+            // Ensure that function name has been declared
             if (!_functionSymbolTable.TryGetValue(funcName, out idDef))
             {
                 Console.WriteLine("[" + node.GetId().Line + "] : " + funcName + " is not defined.");
@@ -307,16 +316,16 @@ namespace CS426.analysis
 
                 // Ensure that argument has been decorated
             }
-            else if (!_decoratedParseTree.TryGetValue(node.GetActualParameters(), out exprDef))
-            {
-                Console.WriteLine("[" + node.GetId().Line + "] : argument was not decorated.");
+            //else if (!_decoratedParseTree.TryGetValue(node.GetActualParameters(), out exprDef))
+            //{
+             //   Console.WriteLine("[" + node.GetId().Line + "] : argument was not decorated.");
 
                 // Ensure that expr is a string or basic type
-            }
-            else if (!(exprDef is StringTypeDefinition) || !(exprDef is BasicTypeDefinition))
-            {
-                Console.WriteLine("[" + node.GetId().Line + "] : CS426 only allows strings and basic types as arguments.");
-            }
+            //}
+            //else if (!_functionSymbolTable.TryGetValue(node.GetActualParameters(), out typeDef))
+            //{
+            //    Console.WriteLine("[" + node.GetId().Line + "] : CS426 only allows strings and basic types as arguments.");
+            //}
         }
 
         // swap(x, y, z, a, b);
@@ -551,6 +560,7 @@ namespace CS426.analysis
         }
 
         // End constant variables section
+
 
         //DONE
         public override void CaseEOF(EOF node)

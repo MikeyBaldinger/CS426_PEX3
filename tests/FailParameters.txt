@@ -6,6 +6,8 @@ func loser(int x) {
 
 main {
 
-	loser(5);
+	int a;
+	a = 5;
+	loser(a);
 	
 }
