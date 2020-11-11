@@ -1,0 +1,11 @@
+// good contants
+
+const int x = 5;
+const int z = 10;
+
+main {
+
+	int y;
+	y = 10;
+	
+}

@@ -1,0 +1,8 @@
+// Expressions: - fails if undeclared variable used
+
+main {
+
+	int x;
+	x = y + 4;
+
+}

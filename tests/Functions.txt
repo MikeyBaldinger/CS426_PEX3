@@ -1,0 +1,13 @@
+// good functions
+
+func test(int x) {
+	x = 10;
+}
+
+main {
+	
+	int z;
+	z = 5;
+	test(z);
+	
+}

@@ -1,0 +1,8 @@
+// Expressions: - fails if type name used instead of variable name
+
+main {
+
+	int x;
+	x = int + 4;
+
+}

@@ -7,6 +7,7 @@ using CS426.node;
 //comment
 namespace CS426.analysis
 {
+
     class SemanticAnalyzer : DepthFirstAdapter
     {
         // Symbol Tables
@@ -41,7 +42,6 @@ namespace CS426.analysis
             _globalSymbolTable.Add("float", floatType);
         }
 
-        //DONE
         public override void InAMainProgram(AMainProgram node)
         {
             // Build definitions for allowed types according to grammar. CS246 grammar only allows int, string, and float
@@ -62,7 +62,6 @@ namespace CS426.analysis
             _currentSymbolTable.Add("float", floatType);
         }
 
-        //DONE
         public override void InAFunctionFunctionDeclaration(AFunctionFunctionDeclaration node)
         {
             // Save current symbol table.
@@ -81,7 +80,6 @@ namespace CS426.analysis
             floatType.name = "float";            
 
             // Create and seed the symbol table.
-            //_functionSymbolTable = new Dictionary<string, Definition>();
             if (!_functionSymbolTable.ContainsKey("int"))
             {
                 _functionSymbolTable.Add("int", intType);
@@ -90,12 +88,8 @@ namespace CS426.analysis
             }
         }
 
-        //DONE
         public override void OutAFunctionFunctionDeclaration(AFunctionFunctionDeclaration node)
         {
-            // Restore previous symbol table
-            //_functionSymbolTable = _previousSymbolTables.First();
-            //_previousSymbolTables.RemoveFirst();
 
             Definition def;
             
@@ -112,11 +106,6 @@ namespace CS426.analysis
             {
                 def = new MethodDefinition();
                 def.name = node.GetId().Text;
-                //((MethodDefinition)def).paramList = new List<VariableDefinition>();
-
-                // ToyLanguage doens't allow parameters, so the parameter list will be empty.
-                //((MethodDefinition)def).paramList.Clear();
-
                 _functionSymbolTable.Add(methodName, def);
             }
         }
@@ -132,13 +121,13 @@ namespace CS426.analysis
             {
                 Console.WriteLine("[" + node.GetType().Line + "] : " + typeName + " is not defined.");
 
-                // Check that the type name is defined as a type
+            // Check that the type name is defined as a type
             }
             else if (!(typeDef is TypeDefinition))
             {
                 Console.WriteLine("[" + node.GetType().Line + "] : " + typeName + " is not a valid type.");
-
             }
+            // Check that the parameter is not already used
             else if (_functionSymbolTable.TryGetValue(varName, out varDef))
             {
                 Console.WriteLine("[" + node.GetVarName().Line + "] : " + varName + " is already a parameter.");
@@ -151,19 +140,9 @@ namespace CS426.analysis
                 _functionSymbolTable.Add(varName, newDef);
 
                 _paramSymbolTable.Add(varName, newDef);
-
-                //Definition def;
-                //def = new MethodDefinition();
-                //def.name = varName;
-
-                //((MethodDefinition)def).paramList = new List<VariableDefinition>();
-                //((MethodDefinition)def).paramList.Add(newDef);
-
-                //_functionSymbolTable.Add(def.name, def);
             }
         }
 
-        //WORKING - constant declarations need global scope
         public override void OutAConstantConstantDeclaration(AConstantConstantDeclaration node)
         {
             // Checking the declaration portion...
@@ -222,7 +201,6 @@ namespace CS426.analysis
             }
         }
 
-        //DONE
         public override void OutAAssignmentLine(AAssignmentLine node)
         {
             Definition idDef, addition_exprDef;
@@ -237,7 +215,11 @@ namespace CS426.analysis
             // Ensure that ID has been declared
             if (!_currentSymbolTable.TryGetValue(varName, out idDef))
             {
-                Console.WriteLine("[" + node.GetId().Line + "] : " + varName + " is not defined.");
+                // Ensure variable is defined if used within function declarations
+                if (!_functionSymbolTable.TryGetValue(varName, out idDef))
+                {
+                    Console.WriteLine("[" + node.GetId().Line + "] : " + varName + " is not defined.");
+                }
 
                 // Ensure that ID is a variable
             }
@@ -261,7 +243,6 @@ namespace CS426.analysis
             }
         }
 
-        //DONE
         public override void OutADeclarationLine(ADeclarationLine node)
         {
             Definition typeDef, varDef;
@@ -305,7 +286,6 @@ namespace CS426.analysis
             }
         }
 
-        //DONE
         public override void OutAFunctionCallLine(AFunctionCallLine node)
         {
             Definition idDef, exprDef, typeDef, test;
@@ -313,13 +293,6 @@ namespace CS426.analysis
 
             String param = node.GetActualParameters().ToString();
             param = param.Substring(0, param.Length - 1);
-
-            //String check = _paramSymbolTable[0].ToString();
-
-            //if (!_currentSymbolTable.TryGetValue(param, out test)) 
-            //{
-            //    Console.WriteLine("[" + param + "] : " + funcName + " is not defined.");
-            //}
 
             // Ensure that function name has been declared
             if (!_currentSymbolTable.TryGetValue(funcName, out idDef))
@@ -334,25 +307,8 @@ namespace CS426.analysis
             else if (!(idDef is MethodDefinition))
             {
                 Console.WriteLine("[" + node.GetId().Line + "] : " + funcName + " is not a method.");
-
-                // Ensure that argument has been decorated
             }
-
-            //if (test.GetType() != _paramSymbolTable)
-
-            //else if (!_decoratedParseTree.TryGetValue(node.GetActualParameters(), out exprDef))
-            //{
-            //    Console.WriteLine("[" + node.GetId().Line + "] : argument was not decorated.");
-
-                // Ensure that expr is a string or basic type
-            //}
-            //else if (!_paramSymbolTable.TryGetValue(node.GetActualParameters().GetType(), out typeDef))
-            //{
-            //    Console.WriteLine("[" + node.GetId().Line + "] : CS426 only allows strings and basic types as arguments.");
-            //}
         }
-
-        // swap(x, y, z, a, b);
 
         // Condition check
         public override void OutACondCondition(ACondCondition node)
@@ -393,7 +349,6 @@ namespace CS426.analysis
             }
         }
 
-        //DONE
         public override void OutAAddAdditionExpr(AAddAdditionExpr node)
         {
             Definition lhs, rhs;
@@ -432,7 +387,6 @@ namespace CS426.analysis
             }
         }
 
-        //DONE
         public override void OutAPassAdditionExpr(APassAdditionExpr node)
         {
             Definition multiExprDef;
@@ -452,7 +406,6 @@ namespace CS426.analysis
 
         }
 
-        //DONE
         public override void OutAMultiMultiExpr(AMultiMultiExpr node)
         {
             Definition lhs, rhs;
@@ -491,7 +444,6 @@ namespace CS426.analysis
             }
         }
 
-        //DONE
         public override void OutAPassMultiExpr(APassMultiExpr node)
         {
             Definition operandDef;
@@ -510,7 +462,6 @@ namespace CS426.analysis
             }
         }
 
-        //DONE
         public override void OutAIntOperand(AIntOperand node)
         {
             // Decorate this node
@@ -519,7 +470,6 @@ namespace CS426.analysis
             _decoratedParseTree.Add(node, intDef);
         }
 
-        //DONE
         public override void OutAIdOperand(AIdOperand node)
         {
 
@@ -529,7 +479,11 @@ namespace CS426.analysis
             // check if varname is declared
             if (!_currentSymbolTable.TryGetValue(varName, out varDef))
             {
-                Console.WriteLine("[" + node.GetId().Line + "] : " + varName + " is not defined.");
+                if (!_globalSymbolTable.TryGetValue(varName, out varDef))
+                {
+                    Console.WriteLine("[" + node.GetId().Line + "] : " + varName + " is not defined.");
+                }
+                
 
                 // check that it is a variable definition
             }
@@ -545,7 +499,6 @@ namespace CS426.analysis
             }
         }
 
-        //DONE
         public override void OutAFloatOperand(AFloatOperand node)
         {
             // Decorate this node
@@ -555,8 +508,6 @@ namespace CS426.analysis
         }
 
         // Override functions for constant variables - global scope
-
-        //DONE
         public override void OutAIntExpression(AIntExpression node)
         {
             // Decorate this node
@@ -565,7 +516,6 @@ namespace CS426.analysis
             _decoratedParseTree.Add(node, intDef);
         }
 
-        //DONE
         public override void OutAFloatExpression(AFloatExpression node)
         {
             // Decorate this node
@@ -574,7 +524,6 @@ namespace CS426.analysis
             _decoratedParseTree.Add(node, floatDef);
         }
 
-        //DONE
         public override void OutAStringExpression(AStringExpression node)
         {
             // Decorate this node
@@ -585,8 +534,6 @@ namespace CS426.analysis
 
         // End constant variables section
 
-
-        //DONE
         public override void CaseEOF(EOF node)
         {
             base.CaseEOF(node);
@@ -594,6 +541,5 @@ namespace CS426.analysis
         }
     }
 }
-
 
 //  Start -> id + start;

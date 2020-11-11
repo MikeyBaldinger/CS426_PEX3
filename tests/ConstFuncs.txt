@@ -1,0 +1,16 @@
+// good program with constants and functions
+
+const int x = 5;
+
+func test(int z, int y) {
+	z = 4;
+}
+
+main {
+
+	int num;
+	num = 4;
+	
+	test(x, num);
+	
+}

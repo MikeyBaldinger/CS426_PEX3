@@ -1,5 +1,5 @@
 :::::::::::::::::::::::::::::
-:: This is the LEXDRIVER it runs the test cases for my language from CS426
+:: This is the BatchResults it runs the test cases for my language from CS426
 ::
 :: use double :'s for a line comment
 :: use > to create and redirect output to a file
@@ -7,12 +7,20 @@
 :::::::::::::::::::::::::::::
 
 :: Run good test cases
-echo C1C Mikey Baldinger and C1C Caden Kulp's 426 Semantic Analyzer > results.txt
+echo C1C Mikey Baldinger and C1C Caden Kulp's CS426 Semantic Analyzer > results.txt
 echo Running Correct Test Cases >> results.txt
 echo. >> results.txt
 
-echo Testing a while control structure >> results.txt
-bin\Debug\ConsoleApplication.exe tests\While.txt >> results.txt
+echo Testing correct constant declarations >> results.txt
+bin\Debug\ConsoleApplication.exe tests\Constants.txt >> results.txt
+echo. >> results.txt
+
+echo Testing correct function declarations and calls >> results.txt
+bin\Debug\ConsoleApplication.exe tests\Functions.txt >> results.txt
+echo. >> results.txt
+
+echo Testing correct function declarations and calls with constants >> results.txt
+bin\Debug\ConsoleApplication.exe tests\ConstFuncs.txt >> results.txt
 echo. >> results.txt
 
 echo ----------------------------------- >> results.txt
@@ -46,6 +54,14 @@ echo. >> results.txt
 
 echo final y x:z; - fails if types of y, z don’t match >> results.txt
 bin\Debug\ConsoleApplication.exe tests\Fail7.txt >> results.txt
+echo. >> results.txt
+
+echo Expressions: - fails if type name used instead of variable name >> results.txt
+bin\Debug\ConsoleApplication.exe tests\Fail10.txt >> results.txt
+echo. >> results.txt
+
+echo Expressions: - fails if undeclared variable used >> results.txt
+bin\Debug\ConsoleApplication.exe tests\Fail11.txt >> results.txt
 echo. >> results.txt
 
 echo arithmatic fail when types don’t match >> results.txt

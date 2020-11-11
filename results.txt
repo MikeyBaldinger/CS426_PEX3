@@ -1,0 +1,995 @@
+C1C Mikey Baldinger and C1C Caden Kulp's CS426 Semantic Analyzer 
+Running Correct Test Cases 
+ 
+Testing correct constant declarations 
+
+- AProgram
+     `- AConstsConstantDeclarations
+     |  |- AConstsConstantDeclarations
+     |  |  |- ANoneConstantDeclarations
+     |  |  `- AConstantConstantDeclaration
+     |  |     |- const
+     |  |     |- int
+     |  |     |- x
+     |  |     |- =
+     |  |     |- AIntExpression
+     |  |     |  `- 5
+     |  |     `- ;
+     |  `- AConstantConstantDeclaration
+     |     |- const
+     |     |- int
+     |     |- z
+     |     |- =
+     |     |- AIntExpression
+     |     |  `- 10
+     |     `- ;
+     |- ANoneFunctionDeclarations
+     `- AMainProgram
+        |- main
+        |- {
+        |- ALinesLinesOfCode
+        |  |- ALineLinesOfCode
+        |  |  `- ADeclLineOfCode
+        |  |     `- ADeclarationLine
+        |  |        |- int
+        |  |        |- y
+        |  |        `- ;
+        |  `- AAssignLineOfCode
+        |     `- AAssignmentLine
+        |        |- y
+        |        |- =
+        |        |- APassAdditionExpr
+        |        |  `- APassMultiExpr
+        |        |     `- AIntOperand
+        |        |        `- 10
+        |        `- ;
+        `- }
+
+Semantic Analyzation complete.
+ 
+Testing correct function declarations and calls 
+
+- AProgram
+     `- ANoneConstantDeclarations
+     |- AFuncsFunctionDeclarations
+     |  |- ANoneFunctionDeclarations
+     |  `- AFunctionFunctionDeclaration
+     |     |- func
+     |     |- test
+     |     |- (
+     |     |- ALastFormalParameters
+     |     |  `- AFormalParameter
+     |     |     |- int
+     |     |     `- x
+     |     |- )
+     |     |- {
+     |     |- ALineLinesOfCode
+     |     |  `- AAssignLineOfCode
+     |     |     `- AAssignmentLine
+     |     |        |- x
+     |     |        |- =
+     |     |        |- APassAdditionExpr
+     |     |        |  `- APassMultiExpr
+     |     |        |     `- AIntOperand
+     |     |        |        `- 10
+     |     |        `- ;
+     |     `- }
+     `- AMainProgram
+        |- main
+        |- {
+        |- ALinesLinesOfCode
+        |  |- ALinesLinesOfCode
+        |  |  |- ALineLinesOfCode
+        |  |  |  `- ADeclLineOfCode
+        |  |  |     `- ADeclarationLine
+        |  |  |        |- int
+        |  |  |        |- z
+        |  |  |        `- ;
+        |  |  `- AAssignLineOfCode
+        |  |     `- AAssignmentLine
+        |  |        |- z
+        |  |        |- =
+        |  |        |- APassAdditionExpr
+        |  |        |  `- APassMultiExpr
+        |  |        |     `- AIntOperand
+        |  |        |        `- 5
+        |  |        `- ;
+        |  `- AFunctionCallLineOfCode
+        |     `- AFunctionCallLine
+        |        |- test
+        |        |- (
+        |        |- ALastActualParameters
+        |        |  `- AExprActualParameter
+        |        |     `- APassAdditionExpr
+        |        |        `- APassMultiExpr
+        |        |           `- AIdOperand
+        |        |              `- z
+        |        |- )
+        |        `- ;
+        `- }
+
+Semantic Analyzation complete.
+ 
+Testing correct function declarations and calls with constants 
+
+- AProgram
+     `- AConstsConstantDeclarations
+     |  |- ANoneConstantDeclarations
+     |  `- AConstantConstantDeclaration
+     |     |- const
+     |     |- int
+     |     |- x
+     |     |- =
+     |     |- AIntExpression
+     |     |  `- 5
+     |     `- ;
+     |- AFuncsFunctionDeclarations
+     |  |- ANoneFunctionDeclarations
+     |  `- AFunctionFunctionDeclaration
+     |     |- func
+     |     |- test
+     |     |- (
+     |     |- AMultipleFormalParameters
+     |     |  |- AFormalParameter
+     |     |  |  |- int
+     |     |  |  `- z
+     |     |  |- ,
+     |     |  `- ALastFormalParameters
+     |     |     `- AFormalParameter
+     |     |        |- int
+     |     |        `- y
+     |     |- )
+     |     |- {
+     |     |- ALineLinesOfCode
+     |     |  `- AAssignLineOfCode
+     |     |     `- AAssignmentLine
+     |     |        |- z
+     |     |        |- =
+     |     |        |- APassAdditionExpr
+     |     |        |  `- APassMultiExpr
+     |     |        |     `- AIntOperand
+     |     |        |        `- 4
+     |     |        `- ;
+     |     `- }
+     `- AMainProgram
+        |- main
+        |- {
+        |- ALinesLinesOfCode
+        |  |- ALinesLinesOfCode
+        |  |  |- ALineLinesOfCode
+        |  |  |  `- ADeclLineOfCode
+        |  |  |     `- ADeclarationLine
+        |  |  |        |- int
+        |  |  |        |- num
+        |  |  |        `- ;
+        |  |  `- AAssignLineOfCode
+        |  |     `- AAssignmentLine
+        |  |        |- num
+        |  |        |- =
+        |  |        |- APassAdditionExpr
+        |  |        |  `- APassMultiExpr
+        |  |        |     `- AIntOperand
+        |  |        |        `- 4
+        |  |        `- ;
+        |  `- AFunctionCallLineOfCode
+        |     `- AFunctionCallLine
+        |        |- test
+        |        |- (
+        |        |- AMultipleActualParameters
+        |        |  |- AExprActualParameter
+        |        |  |  `- APassAdditionExpr
+        |        |  |     `- APassMultiExpr
+        |        |  |        `- AIdOperand
+        |        |  |           `- x
+        |        |  |- ,
+        |        |  `- ALastActualParameters
+        |        |     `- AExprActualParameter
+        |        |        `- APassAdditionExpr
+        |        |           `- APassMultiExpr
+        |        |              `- AIdOperand
+        |        |                 `- num
+        |        |- )
+        |        `- ;
+        `- }
+
+Semantic Analyzation complete.
+ 
+----------------------------------- 
+Running Failure Test Cases 
+ 
+y x; – fails if x already declared 
+
+- AProgram
+     `- ANoneConstantDeclarations
+     |- ANoneFunctionDeclarations
+     `- AMainProgram
+        |- main
+        |- {
+        |- ALinesLinesOfCode
+        |  |- ALineLinesOfCode
+        |  |  `- ADeclLineOfCode
+        |  |     `- ADeclarationLine
+        |  |        |- int
+        |  |        |- x
+        |  |        `- ;
+        |  `- ADeclLineOfCode
+        |     `- ADeclarationLine
+        |        |- int
+        |        |- x
+        |        `- ;
+        `- }
+
+[7] : x is already defined.
+Semantic Analyzation complete.
+ 
+y x; – fails if y is not declared 
+
+- AProgram
+     `- ANoneConstantDeclarations
+     |- ANoneFunctionDeclarations
+     `- AMainProgram
+        |- main
+        |- {
+        |- ALinesLinesOfCode
+        |  |- ALineLinesOfCode
+        |  |  `- ADeclLineOfCode
+        |  |     `- ADeclarationLine
+        |  |        |- trash
+        |  |        |- x
+        |  |        `- ;
+        |  `- AAssignLineOfCode
+        |     `- AAssignmentLine
+        |        |- x
+        |        |- =
+        |        |- APassAdditionExpr
+        |        |  `- APassMultiExpr
+        |        |     `- AIntOperand
+        |        |        `- 5
+        |        `- ;
+        `- }
+
+[5] : trash is not defined.
+[6] : x is not defined.
+Semantic Analyzation complete.
+ 
+y x; – fails if y is declared, but not a type 
+
+- AProgram
+     `- ANoneConstantDeclarations
+     |- ANoneFunctionDeclarations
+     `- AMainProgram
+        |- main
+        |- {
+        |- ALinesLinesOfCode
+        |  |- ALineLinesOfCode
+        |  |  `- ADeclLineOfCode
+        |  |     `- ADeclarationLine
+        |  |        |- int
+        |  |        |- y
+        |  |        `- ;
+        |  `- ADeclLineOfCode
+        |     `- ADeclarationLine
+        |        |- y
+        |        |- x
+        |        `- ;
+        `- }
+
+[6] : y is not a valid type.
+Semantic Analyzation complete.
+ 
+final y x:z; - fails if x already declared 
+
+- AProgram
+     `- AConstsConstantDeclarations
+     |  |- AConstsConstantDeclarations
+     |  |  |- ANoneConstantDeclarations
+     |  |  `- AConstantConstantDeclaration
+     |  |     |- const
+     |  |     |- int
+     |  |     |- x
+     |  |     |- =
+     |  |     |- AIntExpression
+     |  |     |  `- 7
+     |  |     `- ;
+     |  `- AConstantConstantDeclaration
+     |     |- const
+     |     |- int
+     |     |- x
+     |     |- =
+     |     |- AIntExpression
+     |     |  `- 5
+     |     `- ;
+     |- ANoneFunctionDeclarations
+     `- AMainProgram
+        |- main
+        |- {
+        |- ALineLinesOfCode
+        |  `- ADeclLineOfCode
+        |     `- ADeclarationLine
+        |        |- int
+        |        |- y
+        |        `- ;
+        `- }
+
+[4] : x is already defined.
+Semantic Analyzation complete.
+ 
+final y x:z; - fails if y is not declared 
+
+- AProgram
+     `- AConstsConstantDeclarations
+     |  |- ANoneConstantDeclarations
+     |  `- AConstantConstantDeclaration
+     |     |- const
+     |     |- type
+     |     |- x
+     |     |- =
+     |     |- AIntExpression
+     |     |  `- 7
+     |     `- ;
+     |- ANoneFunctionDeclarations
+     `- AMainProgram
+        |- main
+        |- {
+        |- ALineLinesOfCode
+        |  `- ADeclLineOfCode
+        |     `- ADeclarationLine
+        |        |- int
+        |        |- y
+        |        `- ;
+        `- }
+
+[3] : type is not defined.
+[3] : x is not defined.
+Semantic Analyzation complete.
+ 
+final y x=z; - fails if y is declared, but not a type 
+
+- AProgram
+     `- AConstsConstantDeclarations
+     |  |- AConstsConstantDeclarations
+     |  |  |- ANoneConstantDeclarations
+     |  |  `- AConstantConstantDeclaration
+     |  |     |- const
+     |  |     |- int
+     |  |     |- y
+     |  |     |- =
+     |  |     |- AIntExpression
+     |  |     |  `- 3
+     |  |     `- ;
+     |  `- AConstantConstantDeclaration
+     |     |- const
+     |     |- y
+     |     |- x
+     |     |- =
+     |     |- AIntExpression
+     |     |  `- 7
+     |     `- ;
+     |- ANoneFunctionDeclarations
+     `- AMainProgram
+        |- main
+        |- {
+        |- ALineLinesOfCode
+        |  `- ADeclLineOfCode
+        |     `- ADeclarationLine
+        |        |- int
+        |        |- z
+        |        `- ;
+        `- }
+
+[4] : y is not a valid type.
+[4] : x is not defined.
+Semantic Analyzation complete.
+ 
+final y x:z; - fails if types of y, z don’t match 
+
+- AProgram
+     `- AConstsConstantDeclarations
+     |  |- ANoneConstantDeclarations
+     |  `- AConstantConstantDeclaration
+     |     |- const
+     |     |- int
+     |     |- x
+     |     |- =
+     |     |- AFloatExpression
+     |     |  `- 7.3
+     |     `- ;
+     |- ANoneFunctionDeclarations
+     `- AMainProgram
+        |- main
+        |- {
+        |- ALineLinesOfCode
+        |  `- ADeclLineOfCode
+        |     `- ADeclarationLine
+        |        |- int
+        |        |- y
+        |        `- ;
+        `- }
+
+[3] : Invalid assignment. Can not assign float to x.
+Semantic Analyzation complete.
+ 
+Expressions: - fails if type name used instead of variable name 
+
+- AProgram
+     `- ANoneConstantDeclarations
+     |- ANoneFunctionDeclarations
+     `- AMainProgram
+        |- main
+        |- {
+        |- ALinesLinesOfCode
+        |  |- ALineLinesOfCode
+        |  |  `- ADeclLineOfCode
+        |  |     `- ADeclarationLine
+        |  |        |- int
+        |  |        |- x
+        |  |        `- ;
+        |  `- AAssignLineOfCode
+        |     `- AAssignmentLine
+        |        |- x
+        |        |- =
+        |        |- AAddAdditionExpr
+        |        |  |- APassAdditionExpr
+        |        |  |  `- APassMultiExpr
+        |        |  |     `- AIdOperand
+        |        |  |        `- int
+        |        |  |- +
+        |        |  `- APassMultiExpr
+        |        |     `- AIntOperand
+        |        |        `- 4
+        |        `- ;
+        `- }
+
+[6] : int is not a valid variable.
+[6] : left hand side of '+' was not decorated.
+[6] : right hand side was not decorated.
+Semantic Analyzation complete.
+ 
+Expressions: - fails if undeclared variable used 
+
+- AProgram
+     `- ANoneConstantDeclarations
+     |- ANoneFunctionDeclarations
+     `- AMainProgram
+        |- main
+        |- {
+        |- ALinesLinesOfCode
+        |  |- ALineLinesOfCode
+        |  |  `- ADeclLineOfCode
+        |  |     `- ADeclarationLine
+        |  |        |- int
+        |  |        |- x
+        |  |        `- ;
+        |  `- AAssignLineOfCode
+        |     `- AAssignmentLine
+        |        |- x
+        |        |- =
+        |        |- AAddAdditionExpr
+        |        |  |- APassAdditionExpr
+        |        |  |  `- APassMultiExpr
+        |        |  |     `- AIdOperand
+        |        |  |        `- y
+        |        |  |- +
+        |        |  `- APassMultiExpr
+        |        |     `- AIntOperand
+        |        |        `- 4
+        |        `- ;
+        `- }
+
+[6] : y is not defined.
+[6] : left hand side of '+' was not decorated.
+[6] : right hand side was not decorated.
+Semantic Analyzation complete.
+ 
+arithmatic fail when types don’t match 
+
+- AProgram
+     `- ANoneConstantDeclarations
+     |- ANoneFunctionDeclarations
+     `- AMainProgram
+        |- main
+        |- {
+        |- ALinesLinesOfCode
+        |  |- ALinesLinesOfCode
+        |  |  |- ALinesLinesOfCode
+        |  |  |  |- ALinesLinesOfCode
+        |  |  |  |  |- ALinesLinesOfCode
+        |  |  |  |  |  |- ALineLinesOfCode
+        |  |  |  |  |  |  `- ADeclLineOfCode
+        |  |  |  |  |  |     `- ADeclarationLine
+        |  |  |  |  |  |        |- float
+        |  |  |  |  |  |        |- f
+        |  |  |  |  |  |        `- ;
+        |  |  |  |  |  `- AAssignLineOfCode
+        |  |  |  |  |     `- AAssignmentLine
+        |  |  |  |  |        |- f
+        |  |  |  |  |        |- =
+        |  |  |  |  |        |- APassAdditionExpr
+        |  |  |  |  |        |  `- APassMultiExpr
+        |  |  |  |  |        |     `- AFloatOperand
+        |  |  |  |  |        |        `- 1.2
+        |  |  |  |  |        `- ;
+        |  |  |  |  `- ADeclLineOfCode
+        |  |  |  |     `- ADeclarationLine
+        |  |  |  |        |- int
+        |  |  |  |        |- x
+        |  |  |  |        `- ;
+        |  |  |  `- AAssignLineOfCode
+        |  |  |     `- AAssignmentLine
+        |  |  |        |- x
+        |  |  |        |- =
+        |  |  |        |- APassAdditionExpr
+        |  |  |        |  `- APassMultiExpr
+        |  |  |        |     `- AIntOperand
+        |  |  |        |        `- 5
+        |  |  |        `- ;
+        |  |  `- ADeclLineOfCode
+        |  |     `- ADeclarationLine
+        |  |        |- int
+        |  |        |- y
+        |  |        `- ;
+        |  `- AAssignLineOfCode
+        |     `- AAssignmentLine
+        |        |- y
+        |        |- =
+        |        |- AAddAdditionExpr
+        |        |  |- APassAdditionExpr
+        |        |  |  `- APassMultiExpr
+        |        |  |     `- AIdOperand
+        |        |  |        `- f
+        |        |  |- +
+        |        |  `- APassMultiExpr
+        |        |     `- AIdOperand
+        |        |        `- x
+        |        `- ;
+        `- }
+
+[12] : Type mismatch.  Cannot add float to int.
+[12] : right hand side was not decorated.
+Semantic Analyzation complete.
+ 
+arithmatic fail when types aren’t integer or float 
+
+- AProgram
+     `- ANoneConstantDeclarations
+     |- ANoneFunctionDeclarations
+     `- AMainProgram
+        |- main
+        |- {
+        |- ALinesLinesOfCode
+        |  |- ALinesLinesOfCode
+        |  |  |- ALinesLinesOfCode
+        |  |  |  |- ALinesLinesOfCode
+        |  |  |  |  |- ALinesLinesOfCode
+        |  |  |  |  |  |- ALineLinesOfCode
+        |  |  |  |  |  |  `- ADeclLineOfCode
+        |  |  |  |  |  |     `- ADeclarationLine
+        |  |  |  |  |  |        |- type
+        |  |  |  |  |  |        |- f
+        |  |  |  |  |  |        `- ;
+        |  |  |  |  |  `- AAssignLineOfCode
+        |  |  |  |  |     `- AAssignmentLine
+        |  |  |  |  |        |- f
+        |  |  |  |  |        |- =
+        |  |  |  |  |        |- APassAdditionExpr
+        |  |  |  |  |        |  `- APassMultiExpr
+        |  |  |  |  |        |     `- AFloatOperand
+        |  |  |  |  |        |        `- 1.2
+        |  |  |  |  |        `- ;
+        |  |  |  |  `- ADeclLineOfCode
+        |  |  |  |     `- ADeclarationLine
+        |  |  |  |        |- fake
+        |  |  |  |        |- x
+        |  |  |  |        `- ;
+        |  |  |  `- AAssignLineOfCode
+        |  |  |     `- AAssignmentLine
+        |  |  |        |- x
+        |  |  |        |- =
+        |  |  |        |- APassAdditionExpr
+        |  |  |        |  `- APassMultiExpr
+        |  |  |        |     `- AIntOperand
+        |  |  |        |        `- 5
+        |  |  |        `- ;
+        |  |  `- ADeclLineOfCode
+        |  |     `- ADeclarationLine
+        |  |        |- int
+        |  |        |- y
+        |  |        `- ;
+        |  `- AAssignLineOfCode
+        |     `- AAssignmentLine
+        |        |- y
+        |        |- =
+        |        |- AAddAdditionExpr
+        |        |  |- APassAdditionExpr
+        |        |  |  `- APassMultiExpr
+        |        |  |     `- AIntOperand
+        |        |  |        `- 5
+        |        |  |- +
+        |        |  `- APassMultiExpr
+        |        |     `- AIdOperand
+        |        |        `- x
+        |        `- ;
+        `- }
+
+[5] : type is not defined.
+[6] : f is not defined.
+[8] : fake is not defined.
+[9] : x is not defined.
+[12] : x is not defined.
+[12] : right hand side of '+' was not decorated.
+[12] : right hand side was not decorated.
+Semantic Analyzation complete.
+ 
+Assignment: x:y fails when x is not declared 
+
+- AProgram
+     `- ANoneConstantDeclarations
+     |- ANoneFunctionDeclarations
+     `- AMainProgram
+        |- main
+        |- {
+        |- ALinesLinesOfCode
+        |  |- ALinesLinesOfCode
+        |  |  |- ALineLinesOfCode
+        |  |  |  `- ADeclLineOfCode
+        |  |  |     `- ADeclarationLine
+        |  |  |        |- int
+        |  |  |        |- y
+        |  |  |        `- ;
+        |  |  `- AAssignLineOfCode
+        |  |     `- AAssignmentLine
+        |  |        |- y
+        |  |        |- =
+        |  |        |- APassAdditionExpr
+        |  |        |  `- APassMultiExpr
+        |  |        |     `- AIntOperand
+        |  |        |        `- 1
+        |  |        `- ;
+        |  `- AAssignLineOfCode
+        |     `- AAssignmentLine
+        |        |- x
+        |        |- =
+        |        |- APassAdditionExpr
+        |        |  `- APassMultiExpr
+        |        |     `- AIdOperand
+        |        |        `- y
+        |        `- ;
+        `- }
+
+[8] : x is not defined.
+Semantic Analyzation complete.
+ 
+Assignment: x:y fails when x is declared, but not a variable 
+
+- AProgram
+     `- ANoneConstantDeclarations
+     |- ANoneFunctionDeclarations
+     `- AMainProgram
+        |- main
+        |- {
+        |- ALinesLinesOfCode
+        |  |- ALineLinesOfCode
+        |  |  `- ADeclLineOfCode
+        |  |     `- ADeclarationLine
+        |  |        |- int
+        |  |        |- x
+        |  |        `- ;
+        |  `- AAssignLineOfCode
+        |     `- AAssignmentLine
+        |        |- int
+        |        |- =
+        |        |- APassAdditionExpr
+        |        |  `- APassMultiExpr
+        |        |     `- AIntOperand
+        |        |        `- 10
+        |        `- ;
+        `- }
+
+[6] : int is already a constant.
+[6] : int is not a valid variable.
+Semantic Analyzation complete.
+ 
+Assignment: x:y fails when x is constant 
+
+- AProgram
+     `- AConstsConstantDeclarations
+     |  |- ANoneConstantDeclarations
+     |  `- AConstantConstantDeclaration
+     |     |- const
+     |     |- int
+     |     |- x
+     |     |- =
+     |     |- AIntExpression
+     |     |  `- 5
+     |     `- ;
+     |- ANoneFunctionDeclarations
+     `- AMainProgram
+        |- main
+        |- {
+        |- ALinesLinesOfCode
+        |  |- ALinesLinesOfCode
+        |  |  |- ALineLinesOfCode
+        |  |  |  `- ADeclLineOfCode
+        |  |  |     `- ADeclarationLine
+        |  |  |        |- int
+        |  |  |        |- y
+        |  |  |        `- ;
+        |  |  `- AAssignLineOfCode
+        |  |     `- AAssignmentLine
+        |  |        |- y
+        |  |        |- =
+        |  |        |- APassAdditionExpr
+        |  |        |  `- APassMultiExpr
+        |  |        |     `- AIntOperand
+        |  |        |        `- 1
+        |  |        `- ;
+        |  `- AAssignLineOfCode
+        |     `- AAssignmentLine
+        |        |- x
+        |        |- =
+        |        |- APassAdditionExpr
+        |        |  `- APassMultiExpr
+        |        |     `- AIdOperand
+        |        |        `- y
+        |        `- ;
+        `- }
+
+[10] : x is already a constant.
+[10] : x is not defined.
+Semantic Analyzation complete.
+ 
+Assignment: x:y fails when types don’t match 
+
+- AProgram
+     `- ANoneConstantDeclarations
+     |- ANoneFunctionDeclarations
+     `- AMainProgram
+        |- main
+        |- {
+        |- ALinesLinesOfCode
+        |  |- ALinesLinesOfCode
+        |  |  |- ALinesLinesOfCode
+        |  |  |  |- ALineLinesOfCode
+        |  |  |  |  `- ADeclLineOfCode
+        |  |  |  |     `- ADeclarationLine
+        |  |  |  |        |- int
+        |  |  |  |        |- x
+        |  |  |  |        `- ;
+        |  |  |  `- AAssignLineOfCode
+        |  |  |     `- AAssignmentLine
+        |  |  |        |- x
+        |  |  |        |- =
+        |  |  |        |- APassAdditionExpr
+        |  |  |        |  `- APassMultiExpr
+        |  |  |        |     `- AIntOperand
+        |  |  |        |        `- 5
+        |  |  |        `- ;
+        |  |  `- ADeclLineOfCode
+        |  |     `- ADeclarationLine
+        |  |        |- float
+        |  |        |- y
+        |  |        `- ;
+        |  `- AAssignLineOfCode
+        |     `- AAssignmentLine
+        |        |- y
+        |        |- =
+        |        |- APassAdditionExpr
+        |        |  `- APassMultiExpr
+        |        |     `- AIdOperand
+        |        |        `- x
+        |        `- ;
+        `- }
+
+[8] : Invalid assignment. Can not assign int to y.
+Semantic Analyzation complete.
+ 
+Procedures: reports failure when procedure name already used 
+
+- AProgram
+     `- ANoneConstantDeclarations
+     |- AFuncsFunctionDeclarations
+     |  |- AFuncsFunctionDeclarations
+     |  |  |- ANoneFunctionDeclarations
+     |  |  `- AFunctionFunctionDeclaration
+     |  |     |- func
+     |  |     |- loser
+     |  |     `- (
+     |  |     |- ANoneFormalParameters
+     |  |     |- )
+     |  |     |- {
+     |  |     |- ALineLinesOfCode
+     |  |     |  `- ADeclLineOfCode
+     |  |     |     `- ADeclarationLine
+     |  |     |        |- int
+     |  |     |        |- x
+     |  |     |        `- ;
+     |  |     `- }
+     |  `- AFunctionFunctionDeclaration
+     |     |- func
+     |     |- loser
+     |     `- (
+     |     |- ANoneFormalParameters
+     |     |- )
+     |     |- {
+     |     |- ALineLinesOfCode
+     |     |  `- ADeclLineOfCode
+     |     |     `- ADeclarationLine
+     |     |        |- int
+     |     |        |- y
+     |     |        `- ;
+     |     `- }
+     `- AMainProgram
+        |- main
+        |- {
+        |- ALineLinesOfCode
+        |  `- ADeclLineOfCode
+        |     `- ADeclarationLine
+        |        |- int
+        |        |- loser
+        |        `- ;
+        `- }
+
+[7] : loser is already declared.
+Semantic Analyzation complete.
+ 
+Procedures: reports failure when formal parameter declared incorrectly (e.g. x x) 
+
+- AProgram
+     `- ANoneConstantDeclarations
+     |- AFuncsFunctionDeclarations
+     |  |- ANoneFunctionDeclarations
+     |  `- AFunctionFunctionDeclaration
+     |     |- func
+     |     |- loser
+     |     |- (
+     |     |- ALastFormalParameters
+     |     |  `- AFormalParameter
+     |     |     |- type
+     |     |     `- x
+     |     |- )
+     |     |- {
+     |     |- ALineLinesOfCode
+     |     |  `- ADeclLineOfCode
+     |     |     `- ADeclarationLine
+     |     |        |- int
+     |     |        |- x
+     |     |        `- ;
+     |     `- }
+     `- AMainProgram
+        |- main
+        |- {
+        |- ALineLinesOfCode
+        |  `- ADeclLineOfCode
+        |     `- ADeclarationLine
+        |        |- int
+        |        |- loser
+        |        `- ;
+        `- }
+
+[3] : type is not defined.
+Semantic Analyzation complete.
+ 
+Procedures: reports failure when formal parameter declared twice (e.g. int x, int x) 
+
+- AProgram
+     `- ANoneConstantDeclarations
+     |- AFuncsFunctionDeclarations
+     |  |- ANoneFunctionDeclarations
+     |  `- AFunctionFunctionDeclaration
+     |     |- func
+     |     |- loser
+     |     |- (
+     |     |- AMultipleFormalParameters
+     |     |  |- AFormalParameter
+     |     |  |  |- int
+     |     |  |  `- x
+     |     |  |- ,
+     |     |  `- ALastFormalParameters
+     |     |     `- AFormalParameter
+     |     |        |- int
+     |     |        `- x
+     |     |- )
+     |     |- {
+     |     |- ALineLinesOfCode
+     |     |  `- ADeclLineOfCode
+     |     |     `- ADeclarationLine
+     |     |        |- int
+     |     |        |- y
+     |     |        `- ;
+     |     `- }
+     `- AMainProgram
+        |- main
+        |- {
+        |- ALineLinesOfCode
+        |  `- ADeclLineOfCode
+        |     `- ADeclarationLine
+        |        |- int
+        |        |- loser
+        |        `- ;
+        `- }
+
+[3] : x is already a parameter.
+Semantic Analyzation complete.
+ 
+x(y,z) : reports failure when x is not declared 
+
+- AProgram
+     `- ANoneConstantDeclarations
+     |- ANoneFunctionDeclarations
+     `- AMainProgram
+        |- main
+        |- {
+        |- ALineLinesOfCode
+        |  `- AFunctionCallLineOfCode
+        |     `- AFunctionCallLine
+        |        |- loser
+        |        |- (
+        |        |- AMultipleActualParameters
+        |        |  |- AExprActualParameter
+        |        |  |  `- APassAdditionExpr
+        |        |  |     `- APassMultiExpr
+        |        |  |        `- AIntOperand
+        |        |  |           `- 5
+        |        |  |- ,
+        |        |  `- ALastActualParameters
+        |        |     `- AExprActualParameter
+        |        |        `- APassAdditionExpr
+        |        |           `- APassMultiExpr
+        |        |              `- AIntOperand
+        |        |                 `- 4
+        |        |- )
+        |        `- ;
+        `- }
+
+[5] : loser is not defined.
+Semantic Analyzation complete.
+ 
+x(y,z) : reports failure when x is declared, but not a procedure 
+
+- AProgram
+     `- ANoneConstantDeclarations
+     |- ANoneFunctionDeclarations
+     `- AMainProgram
+        |- main
+        |- {
+        |- ALinesLinesOfCode
+        |  |- ALinesLinesOfCode
+        |  |  |- ALineLinesOfCode
+        |  |  |  `- ADeclLineOfCode
+        |  |  |     `- ADeclarationLine
+        |  |  |        |- int
+        |  |  |        |- x
+        |  |  |        `- ;
+        |  |  `- AAssignLineOfCode
+        |  |     `- AAssignmentLine
+        |  |        |- x
+        |  |        |- =
+        |  |        |- APassAdditionExpr
+        |  |        |  `- APassMultiExpr
+        |  |        |     `- AIntOperand
+        |  |        |        `- 5
+        |  |        `- ;
+        |  `- AFunctionCallLineOfCode
+        |     `- AFunctionCallLine
+        |        |- x
+        |        |- (
+        |        |- AMultipleActualParameters
+        |        |  |- AExprActualParameter
+        |        |  |  `- APassAdditionExpr
+        |        |  |     `- APassMultiExpr
+        |        |  |        `- AIntOperand
+        |        |  |           `- 5
+        |        |  |- ,
+        |        |  `- ALastActualParameters
+        |        |     `- AExprActualParameter
+        |        |        `- APassAdditionExpr
+        |        |           `- APassMultiExpr
+        |        |              `- AIntOperand
+        |        |                 `- 4
+        |        |- )
+        |        `- ;
+        `- }
+
+[8] : x is not a method.
+Semantic Analyzation complete.
+ 

@@ -8,6 +8,7 @@ using CS426.parser;
 using CS426.analysis;
 using CS426.lexer;
 using CS426.node;
+using System.Linq.Expressions;
 
 class TextPrinter : ReversedDepthFirstAdapter {
   enum codes {
@@ -125,21 +126,22 @@ class TextPrinter : ReversedDepthFirstAdapter {
 
 class TestParser
 {
-  public static void Main(String[] args)
-  {
-    Lexer l = new Lexer(new StreamReader(args[0]));
-    Parser p = new Parser (l);
-    Start s = p.Parse ();
+    public static void Main(String[] args)
+    {
+        Lexer l = new Lexer(new StreamReader(args[0]));
+        Parser p = new Parser(l);
 
-    TextPrinter printer = new TextPrinter ();
-    if ( args.Length > 0 && args[0] == "-ansi" )
-        printer.SetColor(true);
+        Start s = p.Parse();
 
-    s.Apply(printer);
+        TextPrinter printer = new TextPrinter();
+        if (args.Length > 0 && args[0] == "-ansi")
+            printer.SetColor(true);
 
-    SemanticAnalyzer sa = new SemanticAnalyzer();
-    s.Apply(sa);
-    Console.WriteLine("Press anykey to close...");
-    Console.ReadKey();
-  }
+        s.Apply(printer);
+
+        SemanticAnalyzer sa = new SemanticAnalyzer();
+        s.Apply(sa);
+        //Console.WriteLine("Press anykey to close...");
+        //Console.ReadKey();
+    }
 }
