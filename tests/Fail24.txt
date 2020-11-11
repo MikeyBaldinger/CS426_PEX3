@@ -1,0 +1,11 @@
+// Procedures: reports failure when formal parameter declared twice (e.g. int x, int x)
+
+func loser(int x, int x) {
+	int y;
+}
+
+main {
+	
+	int loser;
+	
+}

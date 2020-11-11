@@ -1,0 +1,11 @@
+// Procedures: reports failure when formal parameter declared incorrectly (e.g. x x)
+
+func loser(type x) {
+	int x;
+}
+
+main {
+	
+	int loser;
+	
+}

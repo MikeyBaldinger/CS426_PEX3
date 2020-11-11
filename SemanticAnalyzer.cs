@@ -11,12 +11,15 @@ namespace CS426.analysis
     {
         // Symbol Tables
         LinkedList<Dictionary<string, Definition>> _previousSymbolTables = new LinkedList<Dictionary<string, Definition>>();
-        Dictionary<string, Definition> _currentSymbolTable = new Dictionary<string, Definition>();
-        Dictionary<string, Definition> _globalSymbolTable = new Dictionary<string, Definition>();
-        Dictionary<string, Definition> _functionSymbolTable = new Dictionary<string, Definition>();
+        Dictionary<string, Definition> _currentSymbolTable = new Dictionary<string, Definition>();  // for main function
+        Dictionary<string, Definition> _globalSymbolTable = new Dictionary<string, Definition>();   // for constants
+        Dictionary<string, Definition> _functionSymbolTable = new Dictionary<string, Definition>(); // for other functions
 
         // ParseTree Decoration
         Dictionary<Node, Definition> _decoratedParseTree = new Dictionary<Node, Definition>();
+
+        //List<Dictionary<VariableDefinition, TypeDefinition>> paramList = new List<Dictionary<VariableDefinition, TypeDefinition>>();
+        Dictionary<string, Definition> _paramSymbolTable = new Dictionary<string, Definition>();
 
         public override void InAProgram(AProgram node)
         {
@@ -65,7 +68,7 @@ namespace CS426.analysis
             // Save current symbol table.
             _previousSymbolTables.AddFirst(_currentSymbolTable);
 
-            // Build definitions for allowed types according to grammar. CS426 only allows int and string
+            // Build definitions for allowed types according to grammar. CS426 only allows int and string and float
             BasicTypeDefinition intType;
             intType = new BasicTypeDefinition();
             intType.name = "int";
@@ -78,10 +81,13 @@ namespace CS426.analysis
             floatType.name = "float";            
 
             // Create and seed the symbol table.
-            _functionSymbolTable = new Dictionary<string, Definition>();
-            _functionSymbolTable.Add("int", intType);
-            _functionSymbolTable.Add("string", stringType);
-            _functionSymbolTable.Add("float", floatType);
+            //_functionSymbolTable = new Dictionary<string, Definition>();
+            if (!_functionSymbolTable.ContainsKey("int"))
+            {
+                _functionSymbolTable.Add("int", intType);
+                _functionSymbolTable.Add("string", stringType);
+                _functionSymbolTable.Add("float", floatType);
+            }
         }
 
         //DONE
@@ -100,7 +106,7 @@ namespace CS426.analysis
             {
                 Console.WriteLine("[" + node.GetOpenpar().Line + "] : " + methodName + " is already declared.");
 
-                // Build function definition and add to symbol table 
+            // Build function definition and add to symbol table 
             }
             else
             {
@@ -142,16 +148,18 @@ namespace CS426.analysis
                 VariableDefinition newDef = new VariableDefinition();
                 newDef.name = varName;
                 newDef.vartype = (TypeDefinition)typeDef;
-                //_functionSymbolTable.Add(varName, newDef);
+                _functionSymbolTable.Add(varName, newDef);
 
-                Definition def;
-                def = new MethodDefinition();
-                def.name = varName;
+                _paramSymbolTable.Add(varName, newDef);
 
-                ((MethodDefinition)def).paramList = new List<VariableDefinition>();
-                ((MethodDefinition)def).paramList.Add(newDef);
+                //Definition def;
+                //def = new MethodDefinition();
+                //def.name = varName;
 
-                _functionSymbolTable.Add(def.name, def);
+                //((MethodDefinition)def).paramList = new List<VariableDefinition>();
+                //((MethodDefinition)def).paramList.Add(newDef);
+
+                //_functionSymbolTable.Add(def.name, def);
             }
         }
 
@@ -300,13 +308,26 @@ namespace CS426.analysis
         //DONE
         public override void OutAFunctionCallLine(AFunctionCallLine node)
         {
-            Definition idDef, exprDef, typeDef;
+            Definition idDef, exprDef, typeDef, test;
             String funcName = node.GetId().Text;
 
+            String param = node.GetActualParameters().ToString();
+            param = param.Substring(0, param.Length - 1);
+
+            //String check = _paramSymbolTable[0].ToString();
+
+            //if (!_currentSymbolTable.TryGetValue(param, out test)) 
+            //{
+            //    Console.WriteLine("[" + param + "] : " + funcName + " is not defined.");
+            //}
+
             // Ensure that function name has been declared
-            if (!_functionSymbolTable.TryGetValue(funcName, out idDef))
+            if (!_currentSymbolTable.TryGetValue(funcName, out idDef))
             {
-                Console.WriteLine("[" + node.GetId().Line + "] : " + funcName + " is not defined.");
+                if (!_functionSymbolTable.TryGetValue(funcName, out idDef))
+                {
+                    Console.WriteLine("[" + node.GetId().Line + "] : " + funcName + " is not defined.");
+                }
 
                 // Ensure that ID is a method
             }
@@ -316,14 +337,17 @@ namespace CS426.analysis
 
                 // Ensure that argument has been decorated
             }
-            else if (!_decoratedParseTree.TryGetValue(node.GetActualParameters(), out exprDef))
-            {
-                Console.WriteLine("[" + node.GetId().Line + "] : argument was not decorated.");
+
+            //if (test.GetType() != _paramSymbolTable)
+
+            //else if (!_decoratedParseTree.TryGetValue(node.GetActualParameters(), out exprDef))
+            //{
+            //    Console.WriteLine("[" + node.GetId().Line + "] : argument was not decorated.");
 
                 // Ensure that expr is a string or basic type
-            }
-            //else if (!_functionSymbolTable.TryGetValue(node.GetActualParameters(), out typeDef))
-            ////{
+            //}
+            //else if (!_paramSymbolTable.TryGetValue(node.GetActualParameters().GetType(), out typeDef))
+            //{
             //    Console.WriteLine("[" + node.GetId().Line + "] : CS426 only allows strings and basic types as arguments.");
             //}
         }

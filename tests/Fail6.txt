@@ -1,0 +1,10 @@
+// final y x=z; - fails if y is declared, but not a type
+
+const int y = 3;
+const y x = 7;
+
+main {
+
+	int z;
+
+}

@@ -1,0 +1,9 @@
+// y x; – fails if x already declared
+
+main {
+
+	int x;
+
+	int x;
+
+}

@@ -1,9 +1,0 @@
-// Fails if x is already declared
-
-main {
-
-	int x;
-
-	int x;
-
-}

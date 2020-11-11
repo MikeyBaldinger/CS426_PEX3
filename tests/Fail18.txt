@@ -1,0 +1,10 @@
+// Assignment: x:=y fails when x is not declared
+
+main {
+	
+	int y;
+	y = 1;
+	
+	x = y;
+
+}

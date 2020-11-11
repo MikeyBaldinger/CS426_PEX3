@@ -1,0 +1,8 @@
+// y x; – fails if y is not declared
+
+main {
+
+	trash x;
+	x = 5;
+
+}

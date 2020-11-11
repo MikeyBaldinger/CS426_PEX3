@@ -1,0 +1,10 @@
+// x(y,z) : reports failure when x is declared, but not a procedure
+
+main {
+
+	int x;
+	x = 5;
+	
+	x(5, 4);
+	
+}

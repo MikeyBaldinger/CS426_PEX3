@@ -1,0 +1,11 @@
+// Assignment: x:=y fails when x is constant
+
+const int x = 5;
+
+main {
+	
+	int y;
+	y = 1;
+	
+	x = y;
+}

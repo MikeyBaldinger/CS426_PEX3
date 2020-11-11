@@ -1,9 +1,0 @@
-// Fails if variable of invalid type
-
-main {
-
-	type y;
-
-	y = 5;
-
-}

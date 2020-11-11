@@ -1,0 +1,9 @@
+// final y x=z; - fails if y is not declared
+
+const type x = 7;
+
+main {
+
+	int y;
+
+}

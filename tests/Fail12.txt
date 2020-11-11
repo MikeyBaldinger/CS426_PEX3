@@ -1,4 +1,4 @@
-// Fails when arithmatic types don't match
+// +,-,*,/ fail when types don’t match
 
 main {
 	

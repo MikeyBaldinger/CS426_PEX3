@@ -1,0 +1,8 @@
+// y x; – fails if y is declared, but not a type
+
+main {
+
+	int y;
+	y x;
+
+}

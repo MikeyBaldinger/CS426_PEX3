@@ -1,7 +1,0 @@
-// Fails when you call a function that has not been declared
-
-main {
-
-	loser(5, 4);
-	
-}

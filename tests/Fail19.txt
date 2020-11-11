@@ -1,0 +1,8 @@
+// Assignment: x:=y fails when x is declared, but not a variable
+
+main {
+	
+	int x;
+	int = 10;
+
+}

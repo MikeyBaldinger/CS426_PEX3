@@ -1,4 +1,4 @@
-// Fails when function name is already used
+// Procedures: reports failure when procedure name already used
 
 func loser() {
 	int x;

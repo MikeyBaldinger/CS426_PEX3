@@ -1,4 +1,4 @@
-// Fails if variable x already declared - Needs work
+// final y x=z; - fails if x already declared
 
 const int x = 7;
 const int x = 5;

@@ -1,0 +1,7 @@
+// x(y,z) : reports failure when x is not declared
+
+main {
+
+	loser(5, 4);
+	
+}
